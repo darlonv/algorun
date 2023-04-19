@@ -1,0 +1,34 @@
+---
+sidebar_position: 2
+---
+import Highlight from '@site/src/components/Highlight';
+import Codigo from '@site/src/components/Codigo';
+import Problema from '@site/src/components/Problema';
+
+# Instalação
+
+Passos para instalação do Judge0
+```bash
+multipass launch --cpus 4 --disk 20G --memory 8G --name judge focal
+multipass shell judge
+sudo su
+snap install docker
+wget https://github.com/judge0/judge0/releases/download/v1.13.0/judge0-v1.13.0.zip
+unzip judge0-v1.13.0.zip
+cd judge0-v1.13.0
+docker-compose up -d db redis
+sleep 10s
+docker-compose up -d
+sleep 5s
+
+# Test: 
+# http://<IP>:2358/dummy-client
+
+#to use serveo.net:
+apt update
+apt install autossh
+autossh -M 0 -R judge:80:localhost:2358 judge@serveo.net
+# Test
+# http://judge.serveo.net/dummy-client
+
+```
