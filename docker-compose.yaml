@@ -1,0 +1,40 @@
+version: '3'
+services:
+  #Algorun
+  algorun_init:
+    image: node:19-slim
+    container_name: algorun_init
+    profiles: ['init', 'algorun', 'all']
+    volumes:
+      - ./:/algorun
+    working_dir: /algorun
+    command: npm install
+
+  algorun:
+    image: node:19-slim
+    container_name: algorun
+    profiles: ['run', 'algorun', 'all']
+    volumes:
+      - ./:/algorun
+    ports:
+      - "3001:3000"
+    working_dir: /algorun
+    command: npx docusaurus start --host 0.0.0.0
+    
+  algorun_deploy:
+    image: node:19
+    container_name: algorun_deploy
+    profiles: ['deploy', 'algorun', 'all']
+    environment:
+      - GIT_USER=$GIT_USER
+      - GIT_PASS=$GIT_PASS
+      - GIT_NAME=$GIT_NAME
+      - GIT_MAIL=$GIT_MAIL
+      - USE_SSH=$USE_SSH
+      - CURRENT_BRANCH=$CURRENT_BRANCH
+    volumes:
+      - ./:/algorun
+    working_dir: /algorun
+    command: bash -c "git config --global user.email $GIT_MAIL && git config --global user.name $GIT_NAME && yarn deploy"
+    
+      
