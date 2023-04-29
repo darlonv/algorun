@@ -9,7 +9,7 @@ export default function Codigo(props) {
   <>
   {/* <Editor height="100vh" language="javascript" value="console.log('hello')"/> */}
   <Editor 
-    height="20vh" 
+    height="50vh" 
     language={props.linguagem} 
     value={props.codigo}
     onChange={props.setCodigo}

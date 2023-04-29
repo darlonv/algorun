@@ -21,8 +21,8 @@ submissionDefault = {
     "number_of_runs": None,
     "stdin": None,
     "expected_output": None,
-    "cpu_time_limit": None,
-    "cpu_extra_time": None,
+    "cpu_time_limit": 1,
+    "cpu_extra_time": 0,
     "wall_time_limit": None,
     "memory_limit": None,
     "stack_limit": None,
@@ -48,7 +48,7 @@ app.add_middleware(
 @app.post('/submissions')
 async def submission(request: Request):
     recv = await request.json()
-    print(recv)
+    print('=====', recv, '=====')
 
     testes = []
 
@@ -58,15 +58,16 @@ async def submission(request: Request):
                                    stdin=teste['input'], 
                                    expected_output=teste['expected_output'])
         response = requests.post(f'{URL}/submissions', json=submission, headers=head)
-        print(response.status_code)
-        print(response.json())
+        # print(response.status_code)
+        # print(response.json())
         teste['token'] = response.json()['token']
         teste['codeOutput'] = '.'
         teste['status'] = '?'
-        print(teste)
+        # print(teste)
+
         testes.append(teste)
 
-    print(testes)
+    # print(testes)
 
 
     # submission = getSubmission(source_code=recv['source_code'], language = recv['language'])
@@ -75,13 +76,23 @@ async def submission(request: Request):
 
 @app.get('/submissions/{token}')
 async def submissions(token):
-    print('++++')
+    print('++++', {token})
+    print(token)
+
     global contador
 
     contador +=1
+    return getSubmissionStatus(token)
 
-    return {'codeOutput':f'{contador}'}
+    # return {'codeOutput':f'{contador}'}
     
+def getSubmissionStatus(token):
+    response = requests.get(f'{URL}/submissions/{token}/')
+    print(response.status_code)
+    print(response.text)
+    return response.text
+
+
 
 def  getSubmission(
         source_code = None, 
@@ -119,5 +130,7 @@ def  getSubmissions(
 def getLanguageId(language):
     if language=='python':
         return 71
+    if language=='java':
+        return 62
     
     return None

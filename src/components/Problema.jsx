@@ -2,7 +2,7 @@ import React, {useState, useRef, useEffect} from 'react';
 import Codigo from './Codigo';
 import Submit from './Submit';
 import Language from './Language';
-import GetCodeOutput, {GetCodeStatus} from './GetCode'
+import Output from './Output'
 
 // https://www.npmjs.com/package/@ramonak/react-progress-bar
 import ProgressBar from '@ramonak/react-progress-bar';
@@ -14,6 +14,7 @@ import "ace-builds/src-noconflict/mode-python";
 export default function Problema(props){
 
   let defaultLanguage = 'python'
+  const URL = 'http://127.0.0.1:8000';
 
   //Resultado default
   let retornoDefault = {
@@ -25,16 +26,19 @@ export default function Problema(props){
   let codigosDefault = {
     'python': `def main():
     #código aqui
-    print('Hello world')
+    print('Hello World!')
 
 if __name__ == '__main__':
     main()
 `,
-    'java'  : `import java.util.scanner;
+    'java'  : `import java.util.Scanner;
 
-class Main{
+public class Main{
   public static void main(String[] args){
-    System.out.println("Hello World");
+    Scanner input = new Scanner(System.in);
+    System.out.println("Hello World!");
+
+    input.close();
   }
 }
 `
@@ -43,6 +47,9 @@ class Main{
   const [linguagem, setLinguagem ] = useState(defaultLanguage); //Linguagem escolhida
   const [retorno,   setRetorno   ] = useState(retornoDefault); //Retorno da execução
   const [porcentCorretos,   setPorcentCorretos   ] = useState(0); //Porcentagem de valores corretos
+  const [submetido,   setSubmetido   ] = useState(false); //Código submetido para execução
+  const [submissao,   setSubmissao   ] = useState(0); //Contagem de submissoes
+
 
   const [codigoPython, setCodigoPython] = useState(codigosDefault['python']);
   const [codigoJava,   setCodigoJava]   = useState(codigosDefault['java']);
@@ -55,23 +62,23 @@ class Main{
     if(_language == 'python'){
       __codigoLinguagem = codigoPython
       __setCodigoLinguagem = setCodigoPython
-      console.log('python selected')
     }else{
       __codigoLinguagem = codigoJava
       __setCodigoLinguagem = setCodigoJava
-      console.log('java selected')
     }
   }
 
   return(
     <>
     {/* <p>Problema aqui. id: {props.id}</p> */}
-    <Language default={linguagem} linguagemRef={setLinguagem}/>
     <p></p>
+    <Table title="Exemplos" rows={props.testes} url={URL} showOutputs={props.showOutputs}/>
+    <Language default={linguagem} linguagemRef={setLinguagem}/>
     {codeLanguage(linguagem)}
+    <br/>
     <Codigo linguagem={linguagem} codigo={__codigoLinguagem} setCodigo={__setCodigoLinguagem} />
-    <Submit codigo={__codigoLinguagem} testes={props.testes} retornoRef={setRetorno} linguagem={linguagem}/>
-    <Table title="Resultados" rows={retorno.testes}/> 
+    <Submit codigo={__codigoLinguagem} testes={props.testes} retornoRef={setRetorno} submetidoRef={setSubmetido} submissao={submissao} submissaoRef={setSubmissao} language={linguagem} url={URL}/>
+    {submetido && <Output rows={retorno.testes} url={URL} submissao={submissao}/> }
     {/* <ProgressBar completed={retorno.porcentCorretos}/> */}
     
     
@@ -94,21 +101,18 @@ function Table(props){
     <table>
       <thead>
       <tr>
-        <td>Input</td>
-        <td>Expected Output</td>
-        <td>Code output</td>
-        <td>Status</td>
+        <td>Entrada</td>
+        <td>Saída esperada</td>
+        {/* <td>Code output</td> */}
       </tr>
       </thead>
       <tbody>
-      {props.rows.map( row => (
+      {props.rows.slice(0,props.showOutputs).map( row => (
         <tr key={row.key}>
           <td>{row.input}</td>
           <td>{row.expected_output}</td>
           {/* <td>{row.codeOutput}</td> */}
-          <td><GetCodeOutput token={row.token}/></td>
-          {/* <td>{row.status}</td> */}
-          <td><GetCodeStatus token={row.token}/></td>
+          {/* <td>{<GetCodeOutput token={row.token} url={props.url}/>}</td> */}
         </tr>
       ))}
       </tbody>
