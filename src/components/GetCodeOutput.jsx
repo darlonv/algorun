@@ -47,11 +47,8 @@ export default function GetCodeOutput(props){
         //processa resposta
         .then( async response => {
           const data = await response.json();
-          console.log(data);
 
           let data_json = JSON.parse(data)
-          console.log(data_json['status'])
-          console.log(data_json['status']['id'])
 
           let status_code = data_json['status']['id']
           let saida = data_json['stdout']
@@ -112,7 +109,7 @@ export default function GetCodeOutput(props){
         .catch( error => {
           // setMostrar(true);
           // setResultado("error");
-          console.error("Erro no request");
+          console.error("Request error");
           // continuar = false;
         });
         
