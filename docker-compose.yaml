@@ -47,7 +47,7 @@ services:
     command: bash -c "git config --global user.email $GIT_MAIL && git config --global user.name $GIT_NAME && yarn deploy"
   
   middle:
-    image: darlon/fastpapi:1.0
+    image: darlon/fastapi:1.0
     ports:
       - 8000:8000
     volumes:
