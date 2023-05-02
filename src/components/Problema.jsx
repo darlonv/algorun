@@ -10,6 +10,7 @@ import AceEditor from "react-ace"
 
 import "ace-builds/src-noconflict/mode-java";
 import "ace-builds/src-noconflict/mode-python";
+import BrowserOnly from '@docusaurus/BrowserOnly';
 
 export default function Problema(props){
 
@@ -69,6 +70,7 @@ public class Main{
   }
 
   return(
+    // <BrowserOnly>
     <>
     {/* <p>Problema aqui. id: {props.id}</p> */}
     <p></p>
@@ -91,6 +93,7 @@ public class Main{
     <p>Linguagem: {linguagem}</p>
      */}
     </>
+    // </BrowserOnly>
   )
 }
 

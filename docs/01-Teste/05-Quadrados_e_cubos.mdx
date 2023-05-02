@@ -1,0 +1,34 @@
+---
+sidebar_position: 5
+---
+import Highlight from '@site/src/components/Highlight';
+import Codigo from '@site/src/components/Codigo';
+import Problema from '@site/src/components/Problema';
+
+# Quadrados e cubos
+
+Desenvolva um algoritmo que recebe um determinado valor como entrada. A partir desse valor, deve ser calculado seu valor ao quadrado e ao cubo.
+
+<Problema id={1}
+testes={[
+    {key:1,  input:'1', expected_output:'1 1'},
+    {key:2,  input:'2', expected_output:'4 8'},
+    {key:3,  input:'3', expected_output:'9 27'},
+    {key:4,  input:'4', expected_output:'16 64'},
+    {key:5,  input:'5', expected_output:'25 125'},
+    {key:6,  input:'6', expected_output:'36 216'},
+    {key:7,  input:'7', expected_output:'49 343'},
+    {key:8,  input:'8', expected_output:'64 512'},
+    {key:9,  input:'9', expected_output:'81 729'},
+    {key:10, input:'10', expected_output:'100 1000'},
+    {key:11, input:'11', expected_output:'121 1331'},
+    {key:12, input:'12', expected_output:'144 1728'},
+    {key:13, input:'13',   expected_output:'169 2197'},
+    {key:14, input:'-1',  expected_output:'1 -1'},
+    {key:15, input:'0',  expected_output:'0 0'},
+    {key:16, input:'-10', expected_output:'100 -1000'},
+    {key:17, input:'-5', expected_output:'25 -125'}
+]}
+type = 'stdin-stdout'
+showOutputs = '1'
+></Problema>

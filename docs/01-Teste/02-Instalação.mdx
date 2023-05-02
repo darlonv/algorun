@@ -32,3 +32,33 @@ autossh -M 0 -R judge:80:localhost:2358 judge@serveo.net
 # http://judge.serveo.net/dummy-client
 
 ```
+
+Passos para instalação do Judge0 como usuario comum na VM
+```bash
+multipass launch --cpus 4 --disk 20G --memory 8G --name judge focal
+multipass shell judge
+sudo apt update
+sudo apt -y install wget unzip autossh screen
+sudo groupadd docker
+sudo usermod -aG docker $USER
+exit
+multipass shell judge
+#sudo su
+sudo snap install docker
+wget https://github.com/judge0/judge0/releases/download/v1.13.0/judge0-v1.13.0.zip
+unzip judge0-v1.13.0.zip
+cd judge0-v1.13.0
+docker-compose up -d db redis
+sleep 10s
+docker-compose up -d
+sleep 5s
+
+# Test: 
+# http://<IP>:2358/dummy-client
+
+#to use serveo.net:
+screen autossh -M 0 -R judge:80:localhost:2358 judge@serveo.net
+# Test
+# http://judge.serveo.net/dummy-client
+
+```
